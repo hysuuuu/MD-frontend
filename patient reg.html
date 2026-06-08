@@ -2823,7 +2823,7 @@
       setNextBtnOutline();
       if (step > 1) setStep(step - 1);
     });
-    nextBtn.addEventListener("click", () => {
+    nextBtn.addEventListener("click", async () => {
       // debug
       validationAttempted = true;
       const ok = validateCurrent(true);
@@ -2839,6 +2839,8 @@
         setStep(step + 1);
         return;
       }
+      const selectedPhoto =
+        photo.files && photo.files[0] ? photo.files[0] : null;
       const payload = {
         first: first.value.trim(),
         last: last.value.trim(),
@@ -2884,10 +2886,86 @@
         },
       };
 
-      // actual data payload
-      // console.log("DEMO PAYLOAD", payload);
-      showToast("Profile created (demo).");
-      announce("Profile created.");
+      const nextBtnTextEl = nextBtn.querySelector(".elementor-button-text");
+      const originalNextBtnText = nextBtnTextEl
+        ? nextBtnTextEl.textContent
+        : "";
+      nextBtn.disabled = true;
+      nextBtn.setAttribute("aria-disabled", "true");
+      if (nextBtnTextEl) nextBtnTextEl.textContent = "Submitting...";
+
+      try {
+        const response = await fetch("/api/patient-register.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const rawResponse = await response.text();
+        let parsedResponse = null;
+        try {
+          parsedResponse = rawResponse ? JSON.parse(rawResponse) : null;
+        } catch (parseError) {
+          parsedResponse = null;
+        }
+
+        if (
+          !response.ok ||
+          !parsedResponse ||
+          parsedResponse.success === false ||
+          parsedResponse.db_error
+        ) {
+          const errorMessage =
+            parsedResponse?.error ||
+            `Registration failed (HTTP ${response.status})`;
+          throw new Error(errorMessage);
+        }
+
+        showToast("Profile created successfully!");
+        announce("Profile created successfully!");
+
+        // const patientId = parsedResponse?.patient_id;
+
+        // if (selectedPhoto && patientId) {
+        //   const photoFormData = new FormData();
+        //   photoFormData.append("patient_id", String(patientId));
+        //   photoFormData.append("photo", selectedPhoto);
+
+        //   const photoResponse = await fetch("PHOTO_UPLOAD_API", {
+        //     method: "POST",
+        //     body: photoFormData,
+        //   });
+
+        //   if (!photoResponse.ok) {
+        //     const photoErrorText = await photoResponse.text();
+        //     console.error(
+        //       "Patient photo upload failed:",
+        //       photoErrorText || `HTTP ${photoResponse.status}`,
+        //     );
+        //     showToast("Profile created. Photo upload failed.");
+        //     announce("Profile created. Photo upload failed.");
+        //   } else {
+        //     showToast("Profile created successfully!");
+        //     announce("Profile created successfully!");
+        //   }
+        // } else {
+        //   showToast("Profile created successfully!");
+        //   announce("Profile created successfully!");
+        // }
+      } catch (err) {
+        console.error(err);
+        alert(err.message || "Server error");
+        showToast("Create failed. Please try again.");
+        announce("Create failed. Please try again.");
+      } finally {
+        // TODO: redirection after registration
+        nextBtn.disabled = false;
+        nextBtn.removeAttribute("aria-disabled");
+        if (nextBtnTextEl)
+          nextBtnTextEl.textContent = originalNextBtnText || "Create profile";
+      }
     });
 
     document
