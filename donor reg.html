@@ -1756,9 +1756,6 @@
   // Also run on DOMContentLoaded as a fallback
   document.addEventListener('DOMContentLoaded', populateDayYear);
 
-  // Configurable API endpoint — can be overridden by setting window.SUBMIT_DONOR_API
-  const SUBMIT_DONOR_API = window.SUBMIT_DONOR_API || 'https://matchingdiabetes.com/api/submit-donor.php';
-
   function showToast(msg){
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -2089,6 +2086,7 @@
     }
     setNextBtnFilled();
     if(step<3){ setStep(step+1); return; }
+    const selectedPhoto = photo.files && photo.files[0] ? photo.files[0] : null;
     const payload = {
       first:first.value.trim(), last:last.value.trim(),
       birth:{month:bMonth.value, day:bDay.value, year:bYear.value},
@@ -2106,6 +2104,10 @@
         showState: document.querySelector('input[name="showState"]:checked')?.value || ''
       }
     };
+
+    // Configurable API endpoint — can be overridden by setting window.SUBMIT_DONOR_API
+    const SUBMIT_DONOR_API = 'https://matchingdiabetes.com/api/submit-donor.php';
+    const PHOTO_UPLOAD_API = 'https://matchingdiabetes.com/api/upload.php';
 
     const nextBtnTextEl = nextBtn.querySelector('.elementor-button-text');
     const originalNextBtnText = nextBtnTextEl ? nextBtnTextEl.textContent : '';
@@ -2128,20 +2130,46 @@
         parsedResponse = null;
       }
 
-      if (!response.ok) {
-        const errorMessage = (parsedResponse && parsedResponse.message)
-          ? parsedResponse.message
-          : `Submit failed (HTTP ${response.status})`;
+      if (!response.ok || !parsedResponse || !parsedResponse.success|| parsedResponse.error) {
+        const errorMessage = 
+          parsedResponse?.db_error ||
+          parsedResponse?.error ||
+          `Registration failed (HTTP ${response.status})`;
         throw new Error(errorMessage);
       }
-      
-      showToast('Profile created.');
-      announce('Profile created.');
+
+      const donorId = parsedResponse?.id;
+
+      if (selectedPhoto && donorId) {
+        const photoFormData = new FormData();
+        photoFormData.append('donor_id', String(donorId));
+        photoFormData.append('photo', selectedPhoto);
+
+        const photoResponse = await fetch(PHOTO_UPLOAD_API, {
+          method: 'POST',
+          body: photoFormData
+        });
+
+        if (!photoResponse.ok) {
+          const photoErrorText = await photoResponse.text();
+          console.error('Donor photo upload failed:', photoErrorText || `HTTP ${photoResponse.status}`);
+          alert('Profile created successfully, but there was an issue uploading your photo.');
+          // TODO: redirection?
+          //window.location.href = ;
+        } else {
+          showToast('Profile created successfully!');
+          // TODO: redirection?
+        }
+      } else {
+        showToast('Profile created.');
+        announce('Profile created.');
+      }
     } catch (error) {
       console.error('Donor submit failed:', error);
       showToast('Create failed. Please try again.');
       announce('Create failed. Please try again.');
     } finally {
+      // TODO: redirection after registration
       nextBtn.disabled = false;
       nextBtn.removeAttribute('aria-disabled');
       if(nextBtnTextEl) nextBtnTextEl.textContent = originalNextBtnText || 'Create profile';
