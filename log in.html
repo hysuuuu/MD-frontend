@@ -1,0 +1,596 @@
+<section class="pdr-auth" id="pdr-auth" data-default="patient">
+  <header class="pdr-header">
+    <h2 class="pdr-title">Log in</h2>
+    <p class="pdr-sub">
+      One secure login for <strong>Patients</strong> and
+      <strong>Donors</strong>. We&#8217;ll route you automatically.
+    </p>
+  </header>
+
+  <div class="pdr-toggle" role="tablist" aria-label="Choose login type">
+    <button
+      class="pdr-tab is-active"
+      role="tab"
+      aria-selected="true"
+      aria-controls="pdr-panel-patient"
+      id="pdr-tab-patient"
+      data-target="patient"
+    >
+      Login as a Patient
+    </button>
+    <button
+      class="pdr-tab"
+      role="tab"
+      aria-selected="false"
+      aria-controls="pdr-panel-donor"
+      id="pdr-tab-donor"
+      data-target="donor"
+    >
+      Login as a Donor
+    </button>
+  </div>
+
+  <div
+    class="pdr-panel"
+    role="tabpanel"
+    id="pdr-panel-patient"
+    aria-labelledby="pdr-tab-patient"
+  >
+    <form
+      class="pdr-form"
+      method="post"
+      action="/wp-login.php"
+      autocomplete="on"
+    >
+      <input type="hidden" name="redirect_to" value="/" />
+      <input type="hidden" name="testcookie" value="1" />
+
+      <label class="pdr-label"
+        >Username
+        <input
+          class="pdr-input"
+          type="text"
+          name="log"
+          placeholder="Your username"
+          autocomplete="username"
+          required
+        />
+      </label>
+
+      <label class="pdr-label"
+        >Password
+        <span class="pdr-passwrap">
+          <input
+            class="pdr-input"
+            type="password"
+            name="pwd"
+            placeholder="Your password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" class="pdr-eye" aria-label="Show password">
+            Show
+          </button>
+        </span>
+      </label>
+
+      <div class="pdr-row">
+        <label class="pdr-remember">
+          <input type="checkbox" name="rememberme" value="forever" /> Remember
+          me on this device
+        </label>
+        <a class="pdr-link" href="/wp-login.php?action=lostpassword"
+          >Forgot password?</a
+        >
+      </div>
+
+      <!-- LOG IN button -->
+      <button class="pdr-btn" type="submit" name="wp-submit" value="Log In">
+        Log In
+      </button>
+      <p class="pdr-legal">
+        By logging in you agree to our
+        <a href="/privacy-policy/">Privacy Policy</a> and
+        <a href="/terms/">Terms</a>.
+      </p>
+    </form>
+  </div>
+
+  <div
+    class="pdr-panel is-hidden"
+    role="tabpanel"
+    id="pdr-panel-donor"
+    aria-labelledby="pdr-tab-donor"
+    hidden
+  >
+    <form
+      class="pdr-form"
+      method="post"
+      action="/wp-login.php"
+      autocomplete="on"
+    >
+      <input type="hidden" name="redirect_to" value="/" />
+      <input type="hidden" name="testcookie" value="1" />
+
+      <label class="pdr-label"
+        >Email address
+        <input
+          class="pdr-input"
+          type="email"
+          name="log"
+          placeholder="you@example.com"
+          autocomplete="username"
+          required
+        />
+      </label>
+
+      <label class="pdr-label"
+        >Password
+        <span class="pdr-passwrap">
+          <input
+            class="pdr-input"
+            type="password"
+            name="pwd"
+            placeholder="Your password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" class="pdr-eye" aria-label="Show password">
+            Show
+          </button>
+        </span>
+      </label>
+
+      <div class="pdr-row">
+        <label class="pdr-remember">
+          <input type="checkbox" name="rememberme" value="forever" /> Remember
+          me on this device
+        </label>
+        <a class="pdr-link" href="/wp-login.php?action=lostpassword"
+          >Forgot password?</a
+        >
+      </div>
+
+      <button class="pdr-btn" type="submit" name="wp-submit" value="Log In">
+        Log In
+      </button>
+      <p class="pdr-legal">
+        By logging in you agree to our
+        <a href="/privacy-policy/">Privacy Policy</a> and
+        <a href="/terms/">Terms</a>.
+      </p>
+    </form>
+  </div>
+
+  <div class="pdr-cta-row">
+    Don&#8217;t have an account?&nbsp;
+    <a href="https://matchingdiabetes.com/donor-registration-2/"
+      >Register as a Donor</a
+    >
+    &nbsp;or&nbsp;
+    <a href="https://matchingdiabetes.com/patient-registration-2/"
+      >Register as a Patient</a
+    >
+  </div>
+</section>
+
+<style>
+  /* ═══════════════════════════════════════════════════════
+     LOGIN PAGE — exact match to Donor Registration design
+     Button system mirrors .elementor-button exactly:
+       default : white bg, #2a93c9 border+text, border-radius:4px
+       hover   : fills #1c85bc, white text
+       active  : fills #0B5F96 (pressed — darker)
+       focus-v : 3px outline #0F6FAE
+     Show/eye  : small squared border btn, same hover/active/focus
+     Tabs      : same border-radius:4px, hover+active states
+  ══════════════════════════════════════════════════════════ */
+  @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
+
+  .pdr-auth,
+  .pdr-auth * {
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
+    font-size: 15px;
+  }
+
+  /* ── Card shell ── */
+  .pdr-auth {
+    max-width: 680px;
+    background: #ffffff;
+    border: 1px solid #e6e9ef;
+    border-radius: 14px;
+    box-shadow: 0 14px 38px rgba(16, 24, 40, 0.08);
+    overflow: hidden;
+    padding: 0;
+  }
+
+  /* ── Card header ── */
+  .pdr-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid #e6e9ef;
+  }
+  .pdr-title {
+    margin: 0 0 6px;
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+  }
+  .pdr-sub {
+    margin: 7px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ── Tab buttons ── */
+  .pdr-toggle {
+    display: flex;
+    gap: 10px;
+    padding: 14px 22px 0;
+    flex-wrap: wrap;
+  }
+
+  .pdr-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px; /* squared — same as .elementor-button */
+    border: 1px solid #2a93c9;
+    background: #ffffff;
+    color: #2a93c9;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: "Lato", sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+    -webkit-appearance: none;
+  }
+  .pdr-tab:hover {
+    background: #2a93c9 !important;
+    border-color: #2a93c9 !important;
+    color: #ffffff !important;
+  }
+  .pdr-tab:active {
+    background: #0b5f96 !important;
+    border-color: #0b5f96 !important;
+    color: #ffffff !important;
+  }
+  .pdr-tab:focus-visible {
+    outline: 3px solid #0f6fae;
+    outline-offset: 2px;
+  }
+  /* Active/selected tab — filled blue, white text */
+  .pdr-tab.is-active {
+    background: #2a93c9 !important;
+    border-color: #2a93c9 !important;
+    color: #ffffff !important;
+    font-weight: 900;
+  }
+  .pdr-tab.is-active:hover {
+    background: #1c85bc !important;
+    border-color: #1c85bc !important;
+    color: #ffffff !important;
+  }
+  .pdr-tab.is-active:active {
+    background: #0b5f96 !important;
+    border-color: #0b5f96 !important;
+    color: #ffffff !important;
+  }
+
+  /* ── Panel / Form body ── */
+  .pdr-panel {
+    padding: 18px 22px;
+  }
+  .pdr-panel.is-hidden {
+    display: none;
+  }
+  .pdr-form {
+    display: grid;
+    gap: 12px;
+  }
+
+  /* ── Labels ── */
+  .pdr-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 900;
+    color: #374151;
+    font-family: "Lato", sans-serif;
+  }
+
+  /* ── Text / password inputs ── */
+  .pdr-input {
+    display: block;
+    width: 100%;
+    border: 1px solid #dfe3ea;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    color: #111827;
+    background: #fff;
+    font-weight: 400;
+    margin-top: 8px;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+  .pdr-input:hover {
+    border-color: #2a93c9;
+  }
+  .pdr-input:focus {
+    outline: none;
+    border-color: #0f6fae;
+    box-shadow: 0 0 0 4px rgba(39, 183, 245, 0.16);
+  }
+  .pdr-input::placeholder {
+    color: #9aa3b2;
+    font-weight: 300;
+  }
+
+  /* ── Password wrap ── */
+  .pdr-passwrap {
+    position: relative;
+    display: block;
+  }
+  .pdr-passwrap .pdr-input {
+    padding-right: 80px;
+  }
+
+  /* ── Show/Hide eye button — squared, same system as other buttons ── */
+  .pdr-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Squared border button matching .elementor-button */
+    border: 1px solid #2a93c9;
+    background: #ffffff;
+    color: #2a93c9;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: "Lato", sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+    margin-top: 4px;
+    -webkit-appearance: none;
+  }
+  .pdr-eye:hover {
+    background: #2a93c9 !important;
+    border-color: #2a93c9 !important;
+    color: #ffffff !important;
+  }
+  .pdr-eye:active {
+    background: #0b5f96 !important;
+    border-color: #0b5f96 !important;
+    color: #ffffff !important;
+  }
+  .pdr-eye:focus-visible {
+    outline: 3px solid #0f6fae;
+    outline-offset: 2px;
+  }
+
+  /* ── Remember / Forgot row ── */
+  .pdr-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .pdr-remember {
+    color: #374151;
+    font-weight: 300;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .pdr-remember input[type="checkbox"] {
+    width: auto;
+    accent-color: #0f6fae;
+    margin: 0;
+  }
+  .pdr-link {
+    color: #0f6fae;
+    text-decoration: underline;
+    font-weight: 300;
+    font-size: 13px;
+  }
+  .pdr-link:hover {
+    color: #0b5f96;
+  }
+
+  /* ── Log In submit button — exact .elementor-button system ── */
+  .pdr-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 4px;
+    border: 1px solid #2a93c9;
+    color: #2a93c9;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+    width: 100%;
+    margin-top: 4px;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+    -webkit-appearance: none;
+  }
+  .pdr-btn:hover {
+    background: #2a93c9 !important;
+    border-color: #2a93c9 !important;
+    color: #ffffff !important;
+  }
+  .pdr-btn:active {
+    background: #0b5f96 !important;
+    border-color: #0b5f96 !important;
+    color: #ffffff !important;
+  }
+  .pdr-btn:focus-visible {
+    outline: 3px solid #0f6fae;
+    outline-offset: 2px;
+  }
+  .pdr-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ── Legal text ── */
+  .pdr-legal {
+    font-size: 12.5px;
+    color: #6b7280;
+    margin: 8px 0 0;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+  .pdr-legal a {
+    color: #0f6fae;
+    text-decoration: underline;
+  }
+  .pdr-legal a:hover {
+    color: #0b5f96;
+  }
+
+  /* ── Register CTA footer row ── */
+  .pdr-cta-row {
+    padding: 14px 22px 18px;
+    border-top: 1px solid #e6e9ef;
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 300;
+  }
+  .pdr-cta-row a {
+    color: #0f6fae;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .pdr-cta-row a:hover {
+    color: #0b5f96;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .pdr-row {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .pdr-auth {
+      border-radius: 10px;
+    }
+    .pdr-toggle {
+      gap: 8px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const root = document.getElementById("pdr-auth");
+    if (!root) return;
+
+    const tabs = root.querySelectorAll(".pdr-tab");
+    const panels = {
+      patient: root.querySelector("#pdr-panel-patient"),
+      donor: root.querySelector("#pdr-panel-donor"),
+    };
+
+    /* ── Tab switching ── */
+    function setRole(role) {
+      tabs.forEach((btn) => {
+        const active = btn.dataset.target === role;
+        btn.classList.toggle("is-active", active);
+        btn.setAttribute("aria-selected", String(active));
+      });
+      for (const key in panels) {
+        const show = key === role;
+        panels[key].classList.toggle("is-hidden", !show);
+        panels[key].hidden = !show;
+      }
+      const first = panels[role].querySelector('input[name="log"]');
+      if (first) first.focus({ preventScroll: true });
+    }
+
+    tabs.forEach((btn) =>
+      btn.addEventListener("click", () => setRole(btn.dataset.target)),
+    );
+    setRole(root.dataset.default || "patient");
+
+    /* ── Show/Hide password (eye button) ──
+     Mirrors donor registration pwToggle exactly:
+     click toggles type, updates label, keeps focus on input */
+    root.querySelectorAll(".pdr-eye").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const wrap = btn.closest(".pdr-passwrap");
+        const input = wrap && wrap.querySelector("input");
+        if (!input) return;
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        btn.textContent = isHidden ? "Hide" : "Show";
+        btn.setAttribute(
+          "aria-label",
+          isHidden ? "Hide password" : "Show password",
+        );
+        /* Visual pressed feedback — matches donor reg active state */
+        btn.style.background = "";
+        btn.style.borderColor = "";
+        btn.style.color = "";
+        input.focus({ preventScroll: true });
+      });
+    });
+
+    /* ── Keyboard: Enter/Space on tab buttons ── */
+    tabs.forEach((btn) => {
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setRole(btn.dataset.target);
+        }
+      });
+    });
+
+    /* ── Submit: visual loading state matching donor reg disabled state ── */
+    root.querySelectorAll('.pdr-btn[type="submit"]').forEach((btn) => {
+      btn.closest("form").addEventListener("submit", () => {
+        btn.disabled = true;
+        btn.textContent = "Signing in…";
+      });
+    });
+  })();
+</script>
