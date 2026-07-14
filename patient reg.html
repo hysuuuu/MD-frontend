@@ -1,13 +1,9 @@
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>
-    MatchingDonors.com — Patient Signup (3-Step • World-Class • BeClinic)
-  </title>
-
   <style>
-
-      @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+    section.elementor-element-3167286 {
+      display: none !important;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
 
 
     :root{
@@ -551,7 +547,7 @@
     <header class="hero">
       <div class="heroTop">
         <div>
-          <h1>Patient Signup</h1>
+          <h1>Patient Registration</h1>
           <p>Create your patient profile in 3 simple steps.</p>
         </div>
         <div class="badges" aria-label="Trust indicators">
@@ -2923,37 +2919,38 @@
           throw new Error(errorMessage);
         }
 
-        showToast("Profile created successfully!");
-        announce("Profile created successfully!");
+        const patientId = parsedResponse?.patient_id;
 
-        // const patientId = parsedResponse?.patient_id;
+        if (selectedPhoto && patientId) {
+          const photoFormData = new FormData();
+          photoFormData.append("patient_id", String(patientId));
+          photoFormData.append("photo", selectedPhoto);
 
-        // if (selectedPhoto && patientId) {
-        //   const photoFormData = new FormData();
-        //   photoFormData.append("patient_id", String(patientId));
-        //   photoFormData.append("photo", selectedPhoto);
+          const photoResponse = await fetch("/api/upload-patient.php", {
+            method: "POST",
+            body: photoFormData,
+          });
 
-        //   const photoResponse = await fetch("PHOTO_UPLOAD_API", {
-        //     method: "POST",
-        //     body: photoFormData,
-        //   });
-
-        //   if (!photoResponse.ok) {
-        //     const photoErrorText = await photoResponse.text();
-        //     console.error(
-        //       "Patient photo upload failed:",
-        //       photoErrorText || `HTTP ${photoResponse.status}`,
-        //     );
-        //     showToast("Profile created. Photo upload failed.");
-        //     announce("Profile created. Photo upload failed.");
-        //   } else {
-        //     showToast("Profile created successfully!");
-        //     announce("Profile created successfully!");
-        //   }
-        // } else {
-        //   showToast("Profile created successfully!");
-        //   announce("Profile created successfully!");
-        // }
+          if (!photoResponse.ok) {
+            const photoErrorText = await photoResponse.text();
+            console.error(
+              "Patient photo upload failed:",
+              photoErrorText || `HTTP ${photoResponse.status}`,
+            );
+            console.error(
+              "Donor photo upload failed:",
+              photoErrorText || `HTTP ${photoResponse.status}`,
+            );
+            alert(
+              "Profile created successfully, but there was an issue uploading your photo.",
+            );
+          } else {
+            showToast("Profile created successfully!");
+          }
+        } else {
+          showToast("Profile created successfully!");
+          announce("Profile created successfully!");
+        }
       } catch (err) {
         console.error(err);
         alert(err.message || "Server error");
